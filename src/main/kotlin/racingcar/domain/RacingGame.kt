@@ -16,20 +16,20 @@ class RacingGame(
         forwardStrategy = forwardStrategy
     )
 
-    fun play(playCount: Int, printCars: (List<Car>) -> Unit = {}): List<String> {
+    fun play(playCount: Int, notifyPerRound: (List<Car>) -> Unit = {}): List<String> {
         require(playCount >= 0) { "실행 횟수는 양수로 입력해주세요." }
 
-        val finishedRacingCars = this.race(this.cars, playCount, printCars)
+        val finishedRacingCars = this.race(this.cars, playCount, notifyPerRound)
         return Rank.getWinnerNames(finishedRacingCars)
     }
 
-    private tailrec fun race(cars: List<Car>, playCount: Int, printCars: (List<Car>) -> Unit): List<Car> {
+    private tailrec fun race(cars: List<Car>, playCount: Int, notifyPerRound: (List<Car>) -> Unit): List<Car> {
         if (playCount == 0) return cars
 
         val movedCars = this.move(cars)
-        printCars(movedCars)
+        notifyPerRound(movedCars)
 
-        return this.race(movedCars, playCount.dec(), printCars)
+        return this.race(movedCars, playCount.dec(), notifyPerRound)
     }
 
     private fun move(cars: List<Car>): List<Car> =
